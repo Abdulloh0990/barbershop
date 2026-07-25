@@ -8,71 +8,86 @@ import {
 } from "framer-motion";
 
 /* ============================================================================
-   ELITE BARBER STUDIO — Premium Single-Page Landing Site
+   DABRO BARBERSHOP — Premium Single-Page Landing Site
    Stack: React + Tailwind CSS + Framer Motion (no other UI libraries)
    Languages: English / Russian / Uzbek (manual state-based i18n)
    ========================================================================= */
 
-/* ----------------------------------------------------------------------
-   MEDIA — replace these with your studio's real photography & footage.
-   Photos are free-to-use Unsplash images; videos are free Mixkit clips.
-   ---------------------------------------------------------------------- */
+/* ============================================================================
+   O'Z RASM VA VIDEOLARINGIZNI SHU YERGA QO'YING — 3 TA JOY:
+
+   1) MEDIA.about          → "Biz haqimizda" bo'limidagi bitta rasm
+   2) galleryData (pastda) → Galereya bo'limidagi 8 ta rasm ("url" maydoni)
+   3) MEDIA.heroVideo va MEDIA.promoVideo → bosh sahifa va "Tajriba" videolari
+
+   QANDAY QILISH KERAK:
+   a) Loyihangizdagi "public" papkasini oching, ichiga "media" degan papka yarating
+      (masalan: public/media/about.jpg, public/media/gallery-1.jpg, public/media/hero.mp4)
+   b) Rasm/video fayllaringizni o'sha papkaga tashlang
+   c) Pastdagi https://... havolalarni shunga almashtiring: "/media/about.jpg"
+      (boshida faqat / bo'lsin, https:// kerak emas — chunki fayl endi o'zingizning loyihangizda)
+
+   Papka bilan ovora bo'lishni istamasangiz: rasm/videoni istalgan bepul saytga
+   (masalan imgur.com, yoki telefoningizdan Google Drive'ga) yuklab, undan chiqqan
+   to'g'ridan-to'g'ri havolani shu yerga qo'ysangiz ham ishlayveradi.
+   ========================================================================= */
 const MEDIA = {
   heroPoster:
     "https://images.unsplash.com/photo-1657105052497-f996284ffff8?auto=format&fit=crop&w=1600&q=80",
-  heroVideo: "https://assets.mixkit.co/videos/43236/43236-360.mp4", // TODO: swap for real studio footage
-  promoVideo: "https://assets.mixkit.co/videos/43232/43232-360.mp4", // TODO: swap for real studio footage
+  heroVideo: "https://assets.mixkit.co/videos/43236/43236-360.mp4", // <-- shu yerga o'z videongizni qo'ying
+  promoVideo: "https://assets.mixkit.co/videos/43232/43232-360.mp4", // <-- shu yerga o'z videongizni qo'ying
   about:
-    "https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?auto=format&fit=crop&w=1200&q=80", // <-- "Biz haqimizda" rasmi shu yerda
 };
 
+/* Galereya rasmlari — pastdagi har bir "url" ni o'zingizning rasmingizga almashtiring */
 const galleryData = [
   {
     id: 1,
     category: "interior",
-    url: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=1400&q=80",
+    url: "https://i.postimg.cc/7ZSnWK9J/IMG-0519.avif",
     span: "md:col-span-2 md:row-span-2",
   },
   {
     id: 2,
     category: "haircuts",
-    url: "https://images.unsplash.com/photo-1647140655214-e4a2d914971f?auto=format&fit=crop&w=900&q=80",
+    url: "https://i.postimg.cc/HWZmr2Q6/Snimok-ekrana-2026-07-25-052546.png",
     span: "",
   },
   {
     id: 3,
     category: "workspace",
-    url: "https://images.unsplash.com/photo-1621645582931-d1d3e6564943?auto=format&fit=crop&w=900&q=80",
+    url: "https://i.postimg.cc/v86hn8nz/IMG-0524.avif",
     span: "md:row-span-2",
   },
   {
     id: 4,
     category: "atmosphere",
-    url: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=900&q=80",
+    url: "https://i.postimg.cc/kGrxs8SZ/IMG-0525.avif",
     span: "",
   },
   {
     id: 5,
     category: "interior",
-    url: "https://images.unsplash.com/photo-1536520002442-39764a41e987?auto=format&fit=crop&w=900&q=80",
+    url: "https://i.postimg.cc/SNM6ngwf/IMG-0520.avif",
     span: "",
   },
-  {
-    id: 6,
-    category: "haircuts",
-    url: "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=1400&q=80",
-    span: "md:col-span-2",
-  },
+  // {
+  //   id: 6,
+  //   category: "haircuts",
+  //   url: "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=1400&q=80",
+  //   span: "md:col-span-2",
+  // },
   {
     id: 7,
     category: "workspace",
-    url: "https://images.unsplash.com/photo-1592647420148-bfcc177e2117?auto=format&fit=crop&w=900&q=80",
+    url: "https://i.postimg.cc/QVGWgrRY/IMG-0522.avif",
     span: "",
   },
   {
     id: 8,
     category: "atmosphere",
-    url: "https://images.unsplash.com/photo-1678356164573-9a534fe43958?auto=format&fit=crop&w=900&q=80",
+    url: "https://i.postimg.cc/1z5MVp0t/IMG-0523.avif",
     span: "",
   },
 ];
@@ -209,6 +224,20 @@ const IconCheck = (p) => (
     <polyline points="5 13 10 18 19 6" />
   </svg>
 );
+const IconBottle = (p) => (
+  <svg {...base} {...p}>
+    <path d="M10 3h4" />
+    <path d="M10 3v3.4L7.4 9.6A3 3 0 0 0 6.5 11.7V19a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-7.3a3 3 0 0 0-.9-2.1L14 6.4V3" />
+    <line x1="8.5" y1="14" x2="15.5" y2="14" />
+  </svg>
+);
+const IconFlask = (p) => (
+  <svg {...base} {...p}>
+    <path d="M9.5 3h5" />
+    <path d="M10.2 3v6.4L5 17.8A2 2 0 0 0 6.7 21h10.6A2 2 0 0 0 19 17.8L13.8 9.4V3" />
+    <line x1="8" y1="15" x2="16" y2="15" />
+  </svg>
+);
 
 /* ============================================================================
    TRANSLATIONS — every UI string in English, Russian & Uzbek
@@ -217,7 +246,7 @@ const translations = {
   en: {
     nav: { home: "Home", about: "About", barbers: "Barbers", prices: "Prices", gallery: "Gallery", contact: "Contact" },
     common: { bookAppointment: "Book Appointment", bookNow: "Book Now", viewBarbers: "View Barbers", scroll: "Scroll", popular: "Most Popular" },
-    hero: { title: "Elite Barber Studio", subtitle: "Where Style Meets Perfection" },
+    hero: { title: "DABRO BARBERSHOP", subtitle: "Where style meets craftsmanship" },
     about: {
       kicker: "About Us",
       title: "The Art of Precision Grooming",
@@ -246,16 +275,15 @@ const translations = {
       kicker: "Price List",
       title: "Investment In Yourself",
       subtitle: "Transparent pricing for uncompromising quality.",
-      duration: "Duration",
-      categories: { haircut: "Haircut", beard: "Beard Trim", kids: "Kids Haircut", combo: "Hair + Beard", premium: "Premium Package" },
-      premiumFeatures: ["Precision Haircut", "Beard Sculpting", "Hot Towel Treatment", "Head & Shoulder Massage", "Premium Styling"],
+      groups: { haircuts: "Haircuts", extras: "Additional Services", promo: "Up to 20% Off", treatments: "Specialty Treatments" },
     },
     contact: {
       kicker: "Visit Us",
       title: "Let's Get You Looking Sharp",
       subtitle: "Book your seat at Tashkent's most exclusive barbershop.",
       address: "Address",
-      addressValue: "12 Amir Temur Street, Tashkent, Uzbekistan",
+      addressValue: "Tashkent, Uzbekistan — tap to view on the map",
+      mapCta: "Open in Google Maps",
       hours: "Working Hours",
       hoursValue: "Mon – Sun: 9:00 AM – 9:00 PM",
       phone: "Phone",
@@ -265,7 +293,7 @@ const translations = {
   ru: {
     nav: { home: "Главная", about: "О нас", barbers: "Барберы", prices: "Цены", gallery: "Галерея", contact: "Контакты" },
     common: { bookAppointment: "Записаться", bookNow: "Записаться", viewBarbers: "Наши барберы", scroll: "Прокрутите", popular: "Популярный выбор" },
-    hero: { title: "Elite Barber Studio", subtitle: "Там, где стиль встречает совершенство" },
+    hero: { title: "DABRO BARBERSHOP", subtitle: "Там, где стиль встречает мастерство" },
     about: {
       kicker: "О нас",
       title: "Искусство безупречного стиля",
@@ -294,16 +322,15 @@ const translations = {
       kicker: "Прайс-лист",
       title: "Инвестиция в себя",
       subtitle: "Прозрачные цены за безупречное качество.",
-      duration: "Длительность",
-      categories: { haircut: "Стрижка", beard: "Оформление бороды", kids: "Детская стрижка", combo: "Стрижка + Борода", premium: "Премиум пакет" },
-      premiumFeatures: ["Точная стрижка", "Моделирование бороды", "Горячее полотенце", "Массаж головы и плеч", "Премиальная укладка"],
+      groups: { haircuts: "Стрижки", extras: "Доп. услуги", promo: "Акция до 20%", treatments: "Спецпроцедуры" },
     },
     contact: {
       kicker: "Приходите к нам",
       title: "Сделаем ваш образ безупречным",
       subtitle: "Забронируйте место в самом эксклюзивном барбершопе Ташкента.",
       address: "Адрес",
-      addressValue: "ул. Амира Темура 12, Ташкент, Узбекистан",
+      addressValue: "Ташкент, Узбекистан — нажмите, чтобы посмотреть на карте",
+      mapCta: "Открыть в Google Картах",
       hours: "Часы работы",
       hoursValue: "Пн – Вс: 9:00 – 21:00",
       phone: "Телефон",
@@ -313,7 +340,7 @@ const translations = {
   uz: {
     nav: { home: "Bosh sahifa", about: "Biz haqimizda", barbers: "Barberlar", prices: "Narxlar", gallery: "Galereya", contact: "Aloqa" },
     common: { bookAppointment: "Aloqaga chiqish", bookNow: "Aloqaga chiqish", viewBarbers: "Barberlarni ko'rish", scroll: "Pastga aylantiring", popular: "Eng mashhur" },
-    hero: { title: "Elite Barber Studio", subtitle: "Uslub mukammallik bilan uchrashadigan joy" },
+    hero: { title: "DABRO BARBERSHOP", subtitle: "Uslub mahorat bilan uchrashadigan joy" },
     about: {
       kicker: "Biz haqimizda",
       title: "Mukammal parvarishlash san'ati",
@@ -342,16 +369,15 @@ const translations = {
       kicker: "Narxlar ro'yxati",
       title: "O'zingizga sarmoya",
       subtitle: "Yuqori sifat uchun shaffof narxlar.",
-      duration: "Davomiyligi",
-      categories: { haircut: "Soch olish", beard: "Soqol olish", kids: "Bolalar uchun soch olish", combo: "Soch + Soqol", premium: "Premium paket" },
-      premiumFeatures: ["Aniq soch olish", "Soqolni shakllantirish", "Issiq sochiq muolajasi", "Bosh va yelka massaji", "Premium turmak"],
+      groups: { haircuts: "Soch olish", extras: "Qo'shimcha xizmatlar", promo: "20% gacha aksiya", treatments: "Maxsus protseduralar" },
     },
     contact: {
       kicker: "Bizga tashrif buyuring",
       title: "Ko'rinishingizni mukammal qilaylik",
       subtitle: "Toshkentning eng nufuzli barbershopidan joy band qiling.",
       address: "Manzil",
-      addressValue: "Amir Temur ko'chasi 12, Toshkent, O'zbekiston",
+      addressValue: "Toshkent, O'zbekiston — xaritada ko'rish uchun bosing",
+      mapCta: "Google Xaritada ochish",
       hours: "Ish vaqti",
       hoursValue: "Dush – Yak: 9:00 – 21:00",
       phone: "Telefon",
@@ -372,6 +398,24 @@ const skillLabels = {
   hotTowel: { en: "Hot Towel", ru: "Горячее полотенце", uz: "Issiq sochiq" },
   hairDesign: { en: "Hair Design", ru: "Дизайн стрижки", uz: "Soch dizayni" },
   kidsCut: { en: "Kids Cut", ru: "Детская стрижка", uz: "Bolalar kesimi" },
+};
+
+/* Names for every line item on the real price board, keyed the same way skillLabels are */
+const priceItemLabels = {
+  mensCut: { en: "Men's Haircut", ru: "Мужская стрижка", uz: "Erkaklar soch olish" },
+  kidsHaircut: { en: "Kids' Haircut (up to 10 y.o.)", ru: "Детская стрижка (до 10 лет)", uz: "Bolalar soch olish (10 yoshgacha)" },
+  longCut: { en: "Long Haircut", ru: "Удлиненная стрижка", uz: "Uzun soch olish" },
+  guardCut: { en: "Single Guard Clipper Cut", ru: "Стрижка под одну насадку", uz: "Bitta nasadka bilan olish" },
+  beardShave: { en: "Beard Shaping & Shave", ru: "Моделирование бороды и бритьё", uz: "Soqolni shakllantirish va olish" },
+  grayCoverage: { en: "Gray Hair Coverage", ru: "Камуфляж седины", uz: "Oqargan sochni tuslash" },
+  facialCare: { en: "Facial Skin Care", ru: "Уход за кожей лица", uz: "Yuz terisiga parvarish" },
+  waxRemoval: { en: "Wax Hair Removal", ru: "Удаление лишних волос воском", uz: "Mumli epilyatsiya" },
+  scalpCare: { en: "Scalp Care", ru: "Уход за кожей головы", uz: "Bosh terisiga parvarish" },
+  fatherSon: { en: "Father + Son", ru: "Отец + Сын", uz: "Ota + O'g'il" },
+  fatherComboSon: { en: "Father (Cut + Beard) + Son", ru: "Отец (Стрижка + борода) + Сын", uz: "Ota (Soch + Soqol) + O'g'il" },
+  cutBeardCombo: { en: "Haircut + Beard Shaping", ru: "Стрижка + моделирование бороды", uz: "Soch olish + Soqol shakllantirish" },
+  hairPerm: { en: "Chemical + Bio Hair Perm", ru: "Хим + Био завивка волос", uz: "Kimyoviy + Bio jingalak qilish" },
+  hairCreatine: { en: "Hair Creatine Treatment", ru: "Креатин для волос", uz: "Soch uchun kreatin" },
 };
 
 /* ============================================================================
@@ -478,12 +522,46 @@ const barbersData = [
   },
 ];
 
-const priceCategories = [
-  { id: "haircut", icon: IconScissors, price: 100000, duration: { en: "40 min", ru: "40 мин", uz: "40 daqiqa" } },
-  { id: "beard", icon: IconRazor, price: 60000, duration: { en: "20 min", ru: "20 мин", uz: "20 daqiqa" } },
-  { id: "kids", icon: IconSmiley, price: 70000, duration: { en: "30 min", ru: "30 мин", uz: "30 daqiqa" } },
-  { id: "combo", icon: IconScissors, price: 150000, duration: { en: "60 min", ru: "60 мин", uz: "60 daqiqa" } },
-  { id: "premium", icon: IconCrown, price: 250000, duration: { en: "90 min", ru: "90 мин", uz: "90 daqiqa" }, featured: true },
+const priceGroups = [
+  {
+    id: "haircuts",
+    icon: IconScissors,
+    items: [
+      { key: "mensCut", price: 100000 },
+      { key: "kidsHaircut", price: 70000 },
+      { key: "longCut", price: 130000 },
+      { key: "guardCut", price: 50000 },
+      { key: "beardShave", price: 70000 },
+    ],
+  },
+  {
+    id: "extras",
+    icon: IconBottle,
+    items: [
+      { key: "grayCoverage", price: 50000 },
+      { key: "facialCare", price: 50000 },
+      { key: "waxRemoval", price: 50000 },
+      { key: "scalpCare", price: 50000 },
+    ],
+  },
+  {
+    id: "promo",
+    icon: IconStar,
+    featured: true,
+    items: [
+      { key: "fatherSon", price: 140000 },
+      { key: "fatherComboSon", price: 180000 },
+      { key: "cutBeardCombo", price: 130000 },
+    ],
+  },
+  {
+    id: "treatments",
+    icon: IconFlask,
+    items: [
+      { key: "hairPerm", price: 500000 },
+      { key: "hairCreatine", price: 400000 },
+    ],
+  },
 ];
 
 const languageOptions = [
@@ -501,22 +579,55 @@ const navLinks = [
   { id: "contact", key: "contact" },
 ];
 
+const shopContact = {
+  phone: "+998 77 960 66 64",
+  telegram: "dabrobarbershop",
+  instagram: "dabrobarbershop",
+  mapsUrl: "https://maps.app.goo.gl/UHqvJfRG2E13WWRi9?g_st=ic",
+};
+
 /* ============================================================================
    GLOBAL STYLES — fonts, scrollbar, selection colour, dark map filter
    ========================================================================= */
 const GlobalStyles = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,500&family=Inter:wght@300;400;500;600;700;800&display=swap');
-    html { scroll-behavior: smooth; background:#000; }
+    :root {
+      --bg: #060606;
+      --surface: #100d0a;
+      --surface-strong: #17120e;
+      --text: #f8f1e6;
+      --muted: #b7aa91;
+      --accent: #d4b06a;
+      --accent-strong: #ecd4a5;
+      --accent-soft: #7a5527;
+      --border: rgba(212, 176, 106, 0.22);
+      --shadow: 0 25px 80px rgba(0, 0, 0, 0.45);
+    }
+    html { scroll-behavior: smooth; background: var(--bg); }
     .font-display { font-family: 'Playfair Display', serif; }
     .font-body { font-family: 'Inter', sans-serif; }
-    ::selection { background:#ffffff; color:#000000; }
+    ::selection { background: var(--accent); color: #000000; }
     ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background:#000000; }
-    ::-webkit-scrollbar-thumb { background:#333333; border-radius: 999px; }
-    ::-webkit-scrollbar-thumb:hover { background:#555555; }
-    * { scrollbar-width: thin; scrollbar-color: #333333 #000000; }
-    .map-dark { filter: invert(92%) hue-rotate(180deg) brightness(0.9) contrast(1.05); }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent) 0%, #8a6432 100%); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, var(--accent-strong) 0%, var(--accent) 100%); }
+    * { scrollbar-width: thin; scrollbar-color: var(--accent) var(--bg); }
+    .map-dark { filter: invert(92%) hue-rotate(180deg) brightness(0.95) contrast(1.05); }
+    .luxury-ring {
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), 0 0 0 1px rgba(212,176,106,0.14);
+    }
+    .gold-line {
+      background: linear-gradient(90deg, transparent 0%, rgba(212,176,106,0.8) 50%, transparent 100%);
+    }
+    .chrome-text {
+      background-image: linear-gradient(180deg, #fbfbfb 0%, #cfcfcf 20%, #6b6b6b 40%, #f7f7f7 52%, #9a9a9a 68%, #eaeaea 82%, #707070 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.35);
+    }
   `}</style>
 );
 
@@ -534,15 +645,15 @@ const SectionHeading = ({ kicker, title, subtitle }) => (
     className="max-w-2xl mx-auto text-center mb-14 md:mb-20"
   >
     <motion.div variants={fadeUp} className="flex items-center justify-center gap-3 mb-5">
-      <span className="h-px w-8 bg-white/30" />
-      <span className="text-xs md:text-sm tracking-[0.3em] uppercase text-neutral-400 font-medium">{kicker}</span>
-      <span className="h-px w-8 bg-white/30" />
+      <span className="h-px w-10 gold-line" />
+      <span className="text-[11px] md:text-sm tracking-[0.35em] uppercase text-[#d1b06b] font-semibold">{kicker}</span>
+      <span className="h-px w-10 gold-line" />
     </motion.div>
-    <motion.h2 variants={fadeUp} className="font-display text-4xl md:text-6xl font-bold leading-[1.05] mb-5">
+    <motion.h2 variants={fadeUp} className="font-display text-4xl md:text-6xl font-bold leading-[1.05] mb-5 text-white">
       {title}
     </motion.h2>
     {subtitle && (
-      <motion.p variants={fadeUp} className="text-neutral-400 text-base md:text-lg leading-relaxed">
+      <motion.p variants={fadeUp} className="text-[#a79c8c] text-base md:text-lg leading-relaxed">
         {subtitle}
       </motion.p>
     )}
@@ -629,11 +740,63 @@ const IconLink = ({ href, label, children }) => (
     target={href?.startsWith("http") ? "_blank" : undefined}
     rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
     aria-label={label}
-    className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-300 hover:bg-white hover:text-black hover:border-white transition-colors duration-300"
+    className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-[#16120f] border border-[#c9a96f]/20 flex items-center justify-center text-[#e8d6a4] hover:bg-[#c9a96f] hover:text-black hover:border-[#c9a96f] transition-all duration-300"
   >
     {children}
   </a>
 );
+
+const FloatingContactButton = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="fixed bottom-4 right-4 z-[60]">
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 12, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.96 }}
+            transition={{ duration: 0.22, ease: EASE }}
+            className="mb-3 w-[270px] rounded-2xl border border-[#c9a96f]/20 bg-[#0f0d0b]/95 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-[#d1b06b]">Call us</p>
+                <p className="font-display text-lg text-white">DABRO BARBERSHOP</p>
+              </div>
+              <button onClick={() => setOpen(false)} className="text-[#a79c8c]">✕</button>
+            </div>
+            <a href={`tel:${shopContact.phone.replace(/\s/g, "")}`} className="mb-2 flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-3 text-sm text-[#f4ebdb]">
+              <IconPhone className="w-4 h-4 text-[#d1b06b]" />
+              <span>{shopContact.phone}</span>
+            </a>
+            <div className="flex items-center gap-2">
+              <IconLink href={`https://t.me/${shopContact.telegram}`} label="Telegram">
+                <IconTelegram className="w-4 h-4" />
+              </IconLink>
+              <IconLink href={`https://instagram.com/${shopContact.instagram}`} label="Instagram">
+                <IconInstagram className="w-4 h-4" />
+              </IconLink>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.button
+        whileHover={{ scale: 1.04, y: -2 }}
+        whileTap={{ scale: 0.96 }}
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center gap-2 rounded-full border border-[#c9a96f]/25 bg-[#0f0d0b] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_35px_rgba(201,169,111,0.2)]"
+      >
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#c9a96f] text-black">
+          <IconPhone className="w-4 h-4" />
+        </span>
+        <span>Call now</span>
+      </motion.button>
+    </div>
+  );
+};
 
 /* Premium barber profile card */
 const BarberCard = ({ barber, lang, t }) => (
@@ -641,7 +804,7 @@ const BarberCard = ({ barber, lang, t }) => (
     variants={fadeUp}
     whileHover={{ y: -10 }}
     transition={{ duration: 0.4, ease: EASE }}
-    className="group relative bg-white/[0.03] border border-white/10 rounded-3xl overflow-hidden hover:border-white/30 hover:shadow-[0_25px_70px_-15px_rgba(255,255,255,0.12)] transition-all duration-500"
+    className="group relative overflow-hidden rounded-[28px] border border-[#d4b06a]/20 bg-[linear-gradient(135deg,rgba(255,255,255,0.035)_0%,rgba(212,176,106,0.10)_100%)] shadow-[0_20px_60px_rgba(0,0,0,0.32)] transition-all duration-500 hover:-translate-y-2 hover:border-[#d4b06a]/35 hover:shadow-[0_30px_80px_rgba(212,176,106,0.16)]"
   >
     {/* Photo + name overlay */}
     <div className="relative aspect-[4/3] overflow-hidden">
@@ -687,91 +850,73 @@ const BarberCard = ({ barber, lang, t }) => (
       <div className="flex items-center justify-between pt-4 border-t border-white/10">
         <div className="flex items-center gap-1.5" title={t.barbers.languages}>
           {barber.languages.map((code) => (
-            <span key={code} className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/10 text-neutral-300">
+            <span key={code} className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-[#c9a96f]/10 text-[#e8d6a4] border border-[#c9a96f]/20">
               {code}
             </span>
           ))}
         </div>
-        <div className="flex items-center gap-2">
-          <IconLink href={`tel:${barber.phone.replace(/\s/g, "")}`} label="Call">
-            <IconPhone className="w-4 h-4" />
-          </IconLink>
-          <IconLink href={`https://t.me/${barber.telegram}`} label="Telegram">
-            <IconTelegram className="w-4 h-4" />
-          </IconLink>
-          <IconLink href={`https://instagram.com/${barber.instagram}`} label="Instagram">
-            <IconInstagram className="w-4 h-4" />
-          </IconLink>
-        </div>
+        <span className="text-[11px] uppercase tracking-[0.25em] text-[#9d8d70]">Booked</span>
       </div>
     </div>
   </motion.div>
 );
 
-/* Price card — regular tier or the inverted "featured" tier */
-const PriceCard = ({ item, t, lang }) => {
-  const Icon = item.icon;
+/* Single line item — name, dotted leader, price (mirrors the printed price board) */
+/* One service, one small card — icon, name, chrome price (matches the card style shown in the reference screenshot) */
+const ServicePriceCard = ({ labelKey, price, icon: Icon, lang }) => (
+  <motion.div
+    variants={fadeUp}
+    whileHover={{ y: -8, borderColor: "rgba(255,255,255,0.3)" }}
+    transition={{ duration: 0.4, ease: EASE }}
+    className="rounded-[24px] border border-[#d4b06a]/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.035)_0%,rgba(212,176,106,0.08)_100%)] p-6 md:p-7 shadow-[0_16px_40px_rgba(0,0,0,0.22)]"
+  >
+    <Icon className="w-7 h-7 mb-5 text-white" strokeWidth={1.2} />
+    <h3 className="font-display text-lg md:text-xl font-bold mb-4 text-white">{priceItemLabels[labelKey][lang]}</h3>
+    <div className="flex items-baseline gap-1.5">
+      <span className="chrome-text text-2xl md:text-3xl font-bold font-display">{price.toLocaleString()}</span>
+      <span className="text-xs text-neutral-500 font-medium">UZS</span>
+    </div>
+  </motion.div>
+);
 
-  if (item.featured) {
-    return (
-      <motion.div
-        variants={fadeUp}
-        whileHover={{ y: -8 }}
-        transition={{ duration: 0.4, ease: EASE }}
-        className="relative sm:col-span-2 lg:col-span-4 bg-white text-black rounded-3xl p-8 md:p-12 overflow-hidden"
-      >
-        <span className="absolute top-6 right-6 md:top-8 md:right-8 bg-black text-white text-[10px] md:text-xs font-semibold tracking-[0.15em] uppercase px-3 py-1.5 rounded-full">
-          {t.common.popular}
-        </span>
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div>
-            <Icon className="w-9 h-9 mb-5" strokeWidth={1.2} />
-            <h3 className="font-display text-3xl md:text-4xl font-bold mb-3">{t.prices.categories[item.id]}</h3>
-            <div className="flex flex-wrap items-baseline gap-2 mb-7">
-              <span className="text-4xl md:text-5xl font-bold font-display">{item.price.toLocaleString()}</span>
-              <span className="text-sm font-medium text-neutral-600">UZS</span>
-              <span className="text-sm text-neutral-500 ml-2 inline-flex items-center gap-1">
-                <IconClock className="w-3.5 h-3.5" /> {item.duration[lang]}
-              </span>
-            </div>
-            <motion.a
-              href="#contact"
-              onClick={(e) => { e.preventDefault(); scrollToId("contact"); }}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              className="inline-block bg-black text-white px-7 py-3.5 rounded-full text-sm font-semibold tracking-wide"
-            >
-              {t.common.bookNow}
-            </motion.a>
-          </div>
-          <ul className="space-y-3">
-            {t.prices.premiumFeatures.map((f, i) => (
-              <li key={i} className="flex items-center gap-3 text-sm md:text-base text-neutral-700">
-                <IconCheck className="w-4 h-4 flex-shrink-0" />
-                {f}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </motion.div>
-    );
-  }
+/* Featured gold card — the 3 real "Акция до 20%" combo offers, replacing the old fake feature checklist */
+const PromoCard = ({ t, lang }) => {
+  const promoGroup = priceGroups.find((g) => g.id === "promo");
 
   return (
     <motion.div
       variants={fadeUp}
-      whileHover={{ y: -8, borderColor: "rgba(255,255,255,0.3)" }}
+      whileHover={{ y: -8 }}
       transition={{ duration: 0.4, ease: EASE }}
-      className="bg-white/[0.03] border border-white/10 rounded-3xl p-7 md:p-8"
+      className="relative overflow-hidden rounded-[28px] border border-[#e8cf9e]/35 bg-[linear-gradient(135deg,#f8edc9_0%,#d4b06a_50%,#83572b_100%)] p-8 text-[#140f08] md:p-12 shadow-[0_20px_70px_rgba(212,176,106,0.2)]"
     >
-      <Icon className="w-8 h-8 mb-6 text-white" strokeWidth={1.2} />
-      <h3 className="font-display text-xl md:text-2xl font-bold mb-4">{t.prices.categories[item.id]}</h3>
-      <div className="flex items-baseline gap-1.5 mb-2">
-        <span className="text-2xl md:text-3xl font-bold font-display">{item.price.toLocaleString()}</span>
-        <span className="text-xs text-neutral-500 font-medium">UZS</span>
-      </div>
-      <div className="flex items-center gap-1.5 text-xs text-neutral-500">
-        <IconClock className="w-3.5 h-3.5" /> {item.duration[lang]}
+      <span className="absolute top-6 right-6 md:top-8 md:right-8 bg-black text-white text-[10px] md:text-xs font-semibold tracking-[0.15em] uppercase px-3 py-1.5 rounded-full">
+        {t.common.popular}
+      </span>
+      <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+        <div>
+          <IconStar className="w-9 h-9 mb-5" strokeWidth={1.2} />
+          <h3 className="font-display text-3xl md:text-4xl font-bold mb-7">{t.prices.groups.promo}</h3>
+          <motion.a
+            href="#contact"
+            onClick={(e) => { e.preventDefault(); scrollToId("contact"); }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className="inline-block bg-black text-white px-7 py-3.5 rounded-full text-sm font-semibold tracking-wide"
+          >
+            {t.common.bookNow}
+          </motion.a>
+        </div>
+        <ul className="space-y-4">
+          {promoGroup.items.map((item) => (
+            <li key={item.key} className="flex items-baseline justify-between gap-4 text-sm md:text-base text-neutral-800">
+              <span>{priceItemLabels[item.key][lang]}</span>
+              <span className="font-bold whitespace-nowrap">
+                {item.price.toLocaleString()} <span className="text-xs font-normal text-neutral-600">UZS</span>
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </motion.div>
   );
@@ -788,14 +933,20 @@ const LoadingScreen = () => (
     transition={{ duration: 0.9, ease: EASE }}
   >
     <motion.div
-      initial={{ opacity: 0, scale: 0.85 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1, ease: EASE }}
+      initial="hidden"
+      animate="visible"
+      variants={staggerContainer(0.22, 0.1)}
       className="flex flex-col items-center"
     >
-      <IconScissors className="w-9 h-9 md:w-10 md:h-10 mb-5 text-white" strokeWidth={1} />
-      <h1 className="font-display text-3xl md:text-5xl tracking-[0.15em] font-semibold text-white">ELITE</h1>
-      <p className="text-[10px] md:text-xs tracking-[0.5em] text-neutral-400 mt-2 uppercase">Barber Studio</p>
+      <motion.div variants={scaleIn}>
+        <IconScissors className="w-9 h-9 md:w-10 md:h-10 mb-5 text-white" strokeWidth={1} />
+      </motion.div>
+      <motion.h1 variants={fadeUp} className="font-display text-3xl md:text-5xl tracking-[0.2em] font-semibold text-white">
+        DABRO
+      </motion.h1>
+      <motion.p variants={fadeUp} className="text-[10px] md:text-xs tracking-[0.35em] text-[#d1b06b] mt-2 uppercase">
+        Barbershop
+      </motion.p>
     </motion.div>
     <div className="absolute bottom-16 w-40 md:w-56 h-px bg-white/10 overflow-hidden rounded-full">
       <motion.div
@@ -830,7 +981,7 @@ const Navbar = ({ lang, setLang, t }) => {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        scrolled ? "bg-black/70 backdrop-blur-xl border-b border-white/10 py-3 md:py-4" : "bg-transparent py-5 md:py-7"
+        scrolled ? "bg-[#060606]/80 backdrop-blur-2xl border-b border-[#d4b06a]/15 py-3 md:py-4 shadow-[0_10px_40px_rgba(0,0,0,0.2)]" : "bg-transparent py-5 md:py-7"
       }`}
     >
       <nav className="max-w-7xl mx-auto px-5 md:px-10 flex items-center justify-between">
@@ -840,7 +991,7 @@ const Navbar = ({ lang, setLang, t }) => {
           className="flex items-center gap-2 group"
         >
           <IconScissors className="w-5 h-5 md:w-6 md:h-6 text-white transition-transform duration-500 group-hover:rotate-45" strokeWidth={1.3} />
-          <span className="font-display text-lg md:text-xl tracking-[0.1em] font-semibold text-white">ELITE</span>
+          <span className="font-display text-lg md:text-xl tracking-[0.1em] font-semibold text-white">DABRO</span>
         </a>
 
         {/* Desktop links */}
@@ -864,17 +1015,19 @@ const Navbar = ({ lang, setLang, t }) => {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             onClick={() => handleNavClick("contact")}
-            className="hidden md:inline-flex items-center bg-white text-black text-xs font-semibold tracking-wide px-5 py-2.5 rounded-full hover:bg-neutral-200 transition-colors duration-300"
+            className="hidden md:inline-flex items-center bg-[linear-gradient(135deg,#f3e4b8_0%,#d4b06a_100%)] text-[#140f08] text-xs font-semibold tracking-[0.2em] uppercase px-5 py-2.5 rounded-full shadow-[0_10px_30px_rgba(212,176,106,0.22)] hover:brightness-110 transition-all duration-300"
           >
             {t.common.bookAppointment}
           </motion.button>
-          <button
-            className="lg:hidden text-white"
+          <motion.button
+            whileHover={{ scale: 1.05, borderColor: "rgba(212,176,106,0.55)" }}
+            whileTap={{ scale: 0.94 }}
+            className="lg:hidden w-10 h-10 rounded-full bg-[#16120f] border border-[#c9a96f]/20 flex items-center justify-center text-white transition-colors duration-300"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle menu"
           >
-            {menuOpen ? <IconClose className="w-6 h-6" /> : <IconMenu className="w-6 h-6" />}
-          </button>
+            {menuOpen ? <IconClose className="w-5 h-5" /> : <IconMenu className="w-5 h-5" />}
+          </motion.button>
         </div>
       </nav>
 
@@ -907,7 +1060,7 @@ const Navbar = ({ lang, setLang, t }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: navLinks.length * 0.06, duration: 0.4 }}
                 onClick={() => handleNavClick("contact")}
-                className="mt-5 bg-white text-black text-sm font-semibold tracking-wide px-5 py-3 rounded-full"
+                className="mt-5 bg-[linear-gradient(135deg,#f3e4b8_0%,#d4b06a_100%)] text-[#140f08] text-sm font-semibold tracking-[0.2em] uppercase px-5 py-3 rounded-full shadow-[0_10px_30px_rgba(212,176,106,0.22)]"
               >
                 {t.common.bookAppointment}
               </motion.button>
@@ -933,7 +1086,7 @@ const Hero = ({ t }) => {
   const titleWords = t.hero.title.split(" ");
 
   return (
-    <section id="home" ref={ref} className="relative h-screen w-full overflow-hidden bg-black">
+    <section id="home" ref={ref} className="relative h-screen w-full overflow-hidden bg-[#060606]">
       {/* Parallax background video */}
       <motion.div style={{ y: bgY, scale: bgScale }} className="absolute inset-0">
         <video
@@ -946,8 +1099,8 @@ const Hero = ({ t }) => {
         >
           <source src={MEDIA.heroVideo} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,6,6,0.15)_0%,rgba(6,6,6,0.4)_35%,rgba(6,6,6,0.75)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(212,176,106,0.18),_transparent_38%)]" />
       </motion.div>
 
       {/* Foreground content */}
@@ -999,7 +1152,7 @@ const Hero = ({ t }) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.96 }}
             onClick={() => scrollToId("contact")}
-            className="group relative overflow-hidden bg-white text-black px-8 py-4 rounded-full font-semibold text-sm tracking-wide inline-flex items-center gap-2 shadow-[0_0_40px_rgba(255,255,255,0.15)]"
+            className="group relative overflow-hidden bg-[linear-gradient(135deg,#f3e4b8_0%,#d4b06a_100%)] text-[#140f08] px-8 py-4 rounded-full font-semibold text-sm tracking-[0.2em] uppercase inline-flex items-center gap-2 shadow-[0_12px_40px_rgba(212,176,106,0.24)]"
           >
             {t.common.bookAppointment}
             <IconArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -1008,7 +1161,7 @@ const Hero = ({ t }) => {
             whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.08)" }}
             whileTap={{ scale: 0.96 }}
             onClick={() => scrollToId("barbers")}
-            className="border border-white/30 text-white px-8 py-4 rounded-full font-semibold text-sm tracking-wide"
+            className="border border-[#f3e4b8]/40 text-[#f8f1e6] bg-white/5 backdrop-blur-md px-8 py-4 rounded-full font-semibold text-sm tracking-[0.2em] uppercase"
           >
             {t.common.viewBarbers}
           </motion.button>
@@ -1042,7 +1195,7 @@ const About = ({ t }) => {
   ];
 
   return (
-    <section id="about" className="relative bg-black py-24 md:py-36 px-6 md:px-10 overflow-hidden">
+    <section id="about" className="relative py-24 md:py-36 px-6 md:px-10 overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(212,176,106,0.12),_transparent_32%),#060606]">
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 md:gap-20 items-center">
         {/* Text column */}
         <motion.div
@@ -1084,12 +1237,12 @@ const About = ({ t }) => {
         >
           <img
             src={MEDIA.about}
-            alt="Inside Elite Barber Studio"
+            alt="Inside DABRO Barbershop"
             loading="lazy"
             className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
           />
           <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl" />
-          <div className="absolute -bottom-6 -left-6 bg-white text-black rounded-2xl px-6 py-5 shadow-2xl hidden md:block">
+          <div className="absolute -bottom-6 -left-6 bg-[linear-gradient(135deg,#f7ebcc_0%,#d4b06a_100%)] text-[#140f08] rounded-2xl px-6 py-5 shadow-[0_20px_60px_rgba(212,176,106,0.2)] hidden md:block">
             <div className="font-display text-2xl font-bold">12+</div>
             <div className="text-xs text-neutral-600 tracking-wide">{t.about.stat1}</div>
           </div>
@@ -1103,7 +1256,7 @@ const About = ({ t }) => {
    4. GALLERY — responsive bento grid with hover zoom + caption reveal
    ========================================================================= */
 const Gallery = ({ t }) => (
-  <section id="gallery" className="relative bg-black py-24 md:py-36 px-6 md:px-10">
+  <section id="gallery" className="relative py-24 md:py-36 px-6 md:px-10 bg-[#060606]">
     <div className="max-w-7xl mx-auto">
       <SectionHeading kicker={t.gallery.kicker} title={t.gallery.title} subtitle={t.gallery.subtitle} />
 
@@ -1118,7 +1271,7 @@ const Gallery = ({ t }) => (
           <motion.div
             key={item.id}
             variants={scaleIn}
-            className={`relative rounded-2xl md:rounded-3xl overflow-hidden group cursor-pointer ${item.span}`}
+            className={`relative rounded-2xl md:rounded-3xl overflow-hidden group cursor-pointer border border-[#d4b06a]/15 bg-[#100d0a] shadow-[0_16px_50px_rgba(0,0,0,0.25)] ${item.span}`}
           >
             <img
               src={item.url}
@@ -1153,7 +1306,7 @@ const VideoSection = ({ t }) => {
   };
 
   return (
-    <section className="relative bg-black py-24 md:py-36 px-6 md:px-10">
+    <section className="relative py-24 md:py-36 px-6 md:px-10 bg-[radial-gradient(circle_at_top,_rgba(212,176,106,0.08),_transparent_35%),#060606]">
       <div className="max-w-6xl mx-auto">
         <SectionHeading kicker={t.video.kicker} title={t.video.title} subtitle={t.video.subtitle} />
 
@@ -1162,7 +1315,7 @@ const VideoSection = ({ t }) => {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.9, ease: EASE }}
-          className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+          className="relative aspect-video rounded-[30px] overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.35)] border border-[#d4b06a]/20 bg-[#100d0a]"
         >
           <video
             ref={videoRef}
@@ -1179,7 +1332,7 @@ const VideoSection = ({ t }) => {
           <button
             onClick={toggleMute}
             aria-label="Toggle sound"
-            className="absolute bottom-5 right-5 w-11 h-11 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-colors duration-300"
+            className="absolute bottom-5 right-5 w-11 h-11 rounded-full bg-[#0f0d09]/70 backdrop-blur-md border border-[#d4b06a]/25 flex items-center justify-center text-[#f8f1e6] hover:bg-[#d4b06a] hover:text-[#140f08] transition-colors duration-300"
           >
             {muted ? <IconVolumeOff className="w-5 h-5" /> : <IconVolumeOn className="w-5 h-5" />}
           </button>
@@ -1193,7 +1346,7 @@ const VideoSection = ({ t }) => {
    6. OUR BARBERS
    ========================================================================= */
 const Barbers = ({ t, lang }) => (
-  <section id="barbers" className="relative bg-black py-24 md:py-36 px-6 md:px-10">
+  <section id="barbers" className="relative py-24 md:py-36 px-6 md:px-10 bg-[#060606]">
     <div className="max-w-6xl mx-auto">
       <SectionHeading kicker={t.barbers.kicker} title={t.barbers.title} subtitle={t.barbers.subtitle} />
       <motion.div
@@ -1214,30 +1367,57 @@ const Barbers = ({ t, lang }) => (
 /* ============================================================================
    7. PRICE LIST
    ========================================================================= */
-const PriceList = ({ t, lang }) => (
-  <section id="prices" className="relative bg-black py-24 md:py-36 px-6 md:px-10">
-    <div className="max-w-6xl mx-auto">
-      <SectionHeading kicker={t.prices.kicker} title={t.prices.title} subtitle={t.prices.subtitle} />
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }}
-        variants={staggerContainer(0.12)}
-        className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
-      >
-        {priceCategories.map((item) => (
-          <PriceCard key={item.id} item={item} t={t} lang={lang} />
-        ))}
-      </motion.div>
-    </div>
-  </section>
-);
+const PriceList = ({ t, lang }) => {
+  const cardGroups = priceGroups.filter((g) => g.id !== "promo");
+
+  return (
+    <section id="prices" className="relative bg-black py-24 md:py-36 px-6 md:px-10">
+      <div className="max-w-6xl mx-auto">
+        <SectionHeading kicker={t.prices.kicker} title={t.prices.title} subtitle={t.prices.subtitle} />
+
+        <div className="space-y-14 md:space-y-16">
+          {cardGroups.map((group) => (
+            <div key={group.id}>
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+                className="flex items-center gap-3 mb-6"
+              >
+                <span className="h-px w-8 gold-line" />
+                <span className="text-xs md:text-sm tracking-[0.3em] uppercase text-[#d1b06b] font-semibold">
+                  {t.prices.groups[group.id]}
+                </span>
+              </motion.div>
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.1 }}
+                variants={staggerContainer(0.1)}
+                className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
+              >
+                {group.items.map((item) => (
+                  <ServicePriceCard key={item.key} labelKey={item.key} price={item.price} icon={group.icon} lang={lang} />
+                ))}
+              </motion.div>
+            </div>
+          ))}
+
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp}>
+            <PromoCard t={t} lang={lang} />
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 /* ============================================================================
    8. CONTACT — info (fade-left), map (fade-right)
    ========================================================================= */
 const Contact = ({ t }) => (
-  <section id="contact" className="relative bg-black py-24 md:py-36 px-6 md:px-10">
+  <section id="contact" className="relative py-24 md:py-36 px-6 md:px-10 bg-[radial-gradient(circle_at_top_right,_rgba(212,176,106,0.12),_transparent_28%),#060606]">
     <div className="max-w-6xl mx-auto">
       <SectionHeading kicker={t.contact.kicker} title={t.contact.title} subtitle={t.contact.subtitle} />
 
@@ -1250,30 +1430,34 @@ const Contact = ({ t }) => (
           className="space-y-4"
         >
           {[
-            { icon: IconPin, label: t.contact.address, value: t.contact.addressValue },
+            { icon: IconPin, label: t.contact.address, value: t.contact.addressValue, href: shopContact.mapsUrl },
             { icon: IconClock, label: t.contact.hours, value: t.contact.hoursValue },
-            { icon: IconPhone, label: t.contact.phone, value: "+998 90 123 45 67" },
-          ].map((row, i) => (
-            <motion.div
-              key={i}
-              variants={fadeLeft}
-              className="flex items-start gap-4 bg-white/[0.03] border border-white/10 rounded-2xl p-5"
-            >
-              <div className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
-                <row.icon className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <div className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-1">{row.label}</div>
-                <div className="text-sm md:text-base text-neutral-200">{row.value}</div>
-              </div>
-            </motion.div>
-          ))}
+            { icon: IconPhone, label: t.contact.phone, value: shopContact.phone, href: `tel:${shopContact.phone.replace(/\s/g, "")}` },
+          ].map((row, i) => {
+            const Wrapper = row.href ? motion.a : motion.div;
+            return (
+              <Wrapper
+                key={i}
+                variants={fadeLeft}
+                {...(row.href ? { href: row.href, target: row.href.startsWith("http") ? "_blank" : undefined, rel: row.href.startsWith("http") ? "noopener noreferrer" : undefined } : {})}
+                className={`flex items-start gap-4 bg-white/[0.03] border border-[#d4b06a]/15 rounded-2xl p-5 backdrop-blur-sm ${row.href ? "hover:border-[#d4b06a]/35 transition-colors duration-300" : ""}`}
+              >
+                <div className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
+                  <row.icon className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <div className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-1">{row.label}</div>
+                  <div className="text-sm md:text-base text-neutral-200">{row.value}</div>
+                </div>
+              </Wrapper>
+            );
+          })}
 
           <motion.div variants={fadeLeft} className="flex items-center gap-3 pt-2">
-            <IconLink href="https://t.me/elitebarber" label="Telegram">
+            <IconLink href={`https://t.me/${shopContact.telegram}`} label="Telegram">
               <IconTelegram className="w-5 h-5" />
             </IconLink>
-            <IconLink href="https://instagram.com/elitebarberstudio" label="Instagram">
+            <IconLink href={`https://instagram.com/${shopContact.instagram}`} label="Instagram">
               <IconInstagram className="w-5 h-5" />
             </IconLink>
           </motion.div>
@@ -1282,30 +1466,36 @@ const Contact = ({ t }) => (
             variants={fadeLeft}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            href="tel:+998901234567"
-            className="inline-block w-full sm:w-auto text-center bg-white text-black px-8 py-4 rounded-full font-semibold text-sm tracking-wide mt-2"
+            href={`tel:${shopContact.phone.replace(/\s/g, "")}`}
+            className="inline-block w-full sm:w-auto text-center bg-[linear-gradient(135deg,#f3e4b8_0%,#d4b06a_100%)] text-[#140f08] px-8 py-4 rounded-full font-semibold text-sm tracking-[0.2em] uppercase mt-2 shadow-[0_10px_30px_rgba(212,176,106,0.24)]"
           >
             {t.common.bookAppointment}
           </motion.a>
         </motion.div>
 
-        <motion.div
+        <motion.a
+          href={shopContact.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           variants={fadeRight}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="relative rounded-3xl overflow-hidden border border-white/10 min-h-[320px]"
+          whileHover={{ scale: 1.01 }}
+          className="group relative flex flex-col items-center justify-center gap-5 text-center p-10 rounded-[30px] overflow-hidden border border-[#d4b06a]/20 min-h-[320px] shadow-[0_20px_70px_rgba(0,0,0,0.3)] bg-[radial-gradient(circle_at_center,_rgba(212,176,106,0.14),_transparent_60%),#0c0a08]"
         >
-          <iframe
-            title="Elite Barber Studio location"
-            src="https://www.google.com/maps?q=Amir+Temur+Street+Tashkent+Uzbekistan&output=embed"
-            width="100%"
-            height="100%"
-            style={{ border: 0, minHeight: "320px" }}
-            loading="lazy"
-            className="absolute inset-0 map-dark"
-          />
-        </motion.div>
+          <div className="w-16 h-16 rounded-full bg-white/5 border border-[#d4b06a]/25 flex items-center justify-center text-[#e8d6a4] group-hover:bg-[#c9a96f] group-hover:text-black transition-colors duration-300">
+            <IconPin className="w-7 h-7" />
+          </div>
+          <div>
+            <p className="font-display text-xl md:text-2xl font-bold text-white mb-1">DABRO BARBERSHOP</p>
+            <p className="text-sm text-neutral-400">Tashkent, Uzbekistan</p>
+          </div>
+          <span className="inline-flex items-center gap-2 bg-[linear-gradient(135deg,#f3e4b8_0%,#d4b06a_100%)] text-[#140f08] px-6 py-3 rounded-full text-xs font-semibold tracking-[0.2em] uppercase">
+            {t.contact.mapCta}
+            <IconArrowRight className="w-3.5 h-3.5" />
+          </span>
+        </motion.a>
       </div>
     </div>
   </section>
@@ -1315,25 +1505,25 @@ const Contact = ({ t }) => (
    9. FOOTER — minimal, social icons, copyright
    ========================================================================= */
 const Footer = ({ t }) => (
-  <footer className="relative bg-black border-t border-white/10 pt-16 pb-8 px-6 md:px-10">
+  <footer className="relative border-t border-[#d4b06a]/15 pt-16 pb-8 px-6 md:px-10 bg-[#060606]">
     <div className="max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-white/10">
         <div className="flex flex-col items-center md:items-start gap-3">
           <div className="flex items-center gap-2">
             <IconScissors className="w-5 h-5 text-white" strokeWidth={1.3} />
-            <span className="font-display text-xl tracking-[0.1em] font-semibold text-white">ELITE</span>
+            <span className="font-display text-xl tracking-[0.1em] font-semibold text-white">DABRO</span>
           </div>
           <p className="text-sm text-neutral-500">{t.footer.tagline}</p>
         </div>
 
         <div className="flex items-center gap-3">
-          <IconLink href="tel:+998901234567" label="Phone">
+          <IconLink href={`tel:${shopContact.phone.replace(/\s/g, "")}`} label="Phone">
             <IconPhone className="w-4 h-4" />
           </IconLink>
-          <IconLink href="https://t.me/elitebarber" label="Telegram">
+          <IconLink href={`https://t.me/${shopContact.telegram}`} label="Telegram">
             <IconTelegram className="w-4 h-4" />
           </IconLink>
-          <IconLink href="https://instagram.com/elitebarberstudio" label="Instagram">
+          <IconLink href={`https://instagram.com/${shopContact.instagram}`} label="Instagram">
             <IconInstagram className="w-4 h-4" />
           </IconLink>
         </div>
@@ -1341,14 +1531,14 @@ const Footer = ({ t }) => (
         <button
           onClick={() => scrollToId("home")}
           aria-label="Back to top"
-          className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-neutral-300 hover:bg-white hover:text-black transition-colors duration-300"
+          className="w-10 h-10 rounded-full border border-[#d4b06a]/20 flex items-center justify-center text-[#f8f1e6] hover:bg-[#d4b06a] hover:text-[#140f08] transition-colors duration-300"
         >
           <IconArrowUp className="w-4 h-4" />
         </button>
       </div>
 
       <p className="text-center text-xs text-neutral-600 pt-8">
-        © {new Date().getFullYear()} Elite Barber Studio. {t.footer.rights}
+        © {new Date().getFullYear()} DABRO Barbershop. {t.footer.rights}
       </p>
     </div>
   </footer>
@@ -1392,6 +1582,7 @@ export default function App() {
         <Contact t={t} />
       </main>
 
+      <FloatingContactButton />
       <Footer t={t} />
     </div>
   );
