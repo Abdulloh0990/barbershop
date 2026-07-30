@@ -35,9 +35,13 @@ const MEDIA = {
   heroPoster:
     "https://images.unsplash.com/photo-1657105052497-f996284ffff8?auto=format&fit=crop&w=1600&q=80",
   heroVideo: "https://assets.mixkit.co/videos/43236/43236-360.mp4", // <-- shu yerga o'z videongizni qo'ying
-  promoVideo: "https://assets.mixkit.co/videos/43232/43232-360.mp4", // <-- shu yerga o'z videongizni qo'ying
+  // DIQQAT: hozir bu yerda video o'rniga RASM (.avif) havolasi turibdi, shuning uchun
+  // "Tajriba" bo'limidagi video hozircha ishlamaydi (kod endi shunga chidamli qilib
+  // qo'yildi — video ishlamasa, shu joyda oddiy rasm ko'rsatiladi). Ishlashi uchun
+  // shu yerga haqiqiy .mp4 video havolasini qo'ying.
+  promoVideo: "https://i.postimg.cc/tTn25Yjn/IMG-2370.avif", // <-- shu yerga o'z VIDEOingizni (.mp4) qo'ying
   about:
-    "https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?auto=format&fit=crop&w=1200&q=80", // <-- "Biz haqimizda" rasmi shu yerda
+    "https://i.postimg.cc/NGbNBq00/IMG-2377.avif", // <-- "Biz haqimizda" rasmi shu yerda
 };
 
 /* Galereya rasmlari — pastdagi har bir "url" ni o'zingizning rasmingizga almashtiring */
@@ -51,7 +55,7 @@ const galleryData = [
   {
     id: 2,
     category: "haircuts",
-    url: "https://i.postimg.cc/HWZmr2Q6/Snimok-ekrana-2026-07-25-052546.png",
+    url: "https://i.postimg.cc/qRcpzB5b/IMG-2381.avif",
     span: "",
   },
   {
@@ -69,15 +73,15 @@ const galleryData = [
   {
     id: 5,
     category: "interior",
-    url: "https://i.postimg.cc/SNM6ngwf/IMG-0520.avif",
+    url: "https://i.postimg.cc/HWZmr2Q6/Snimok-ekrana-2026-07-25-052546.png",
     span: "",
   },
-  // {
-  //   id: 6,
-  //   category: "haircuts",
-  //   url: "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=1400&q=80",
-  //   span: "md:col-span-2",
-  // },
+  {
+    id: 6,
+    category: "haircuts",
+    url: "https://i.postimg.cc/SNM6ngwf/IMG-0520.avif",
+    span: "md:col-span-2",
+  },
   {
     id: 7,
     category: "workspace",
@@ -87,7 +91,7 @@ const galleryData = [
   {
     id: 8,
     category: "atmosphere",
-    url: "https://i.postimg.cc/1z5MVp0t/IMG-0523.avif",
+    url: "https://i.postimg.cc/26S0B2HX/IMG-2384.avif",
     span: "",
   },
 ];
@@ -98,6 +102,29 @@ const galleryData = [
 const scrollToId = (id) => {
   const el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: "smooth" });
+};
+
+/* Tor ekranlarda (telefon) yoki "reduced motion" yoqilgan bo'lsa, eng "og'ir"
+   scroll-parallaks effektlarini (scale + translate) o'chirish uchun. Aynan shu
+   effektlar to'liq ekranli video ustida ishlaganda telefonda eng ko'p "qotish"ga
+   sabab bo'ladi. */
+const useSimplifiedMotion = () => {
+  const [simplified, setSimplified] = useState(false);
+
+  useEffect(() => {
+    const mqMobile = window.matchMedia("(max-width: 767px)");
+    const mqReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setSimplified(mqMobile.matches || mqReduced.matches);
+    update();
+    mqMobile.addEventListener("change", update);
+    mqReduced.addEventListener("change", update);
+    return () => {
+      mqMobile.removeEventListener("change", update);
+      mqReduced.removeEventListener("change", update);
+    };
+  }, []);
+
+  return simplified;
 };
 
 /* ============================================================================
@@ -250,7 +277,7 @@ const translations = {
     about: {
       kicker: "About Us",
       title: "The Art of Precision Grooming",
-      text: "For over a decade, Elite Barber Studio has redefined the grooming experience in the city. We blend timeless craftsmanship with modern technique, creating a sanctuary where every detail — from the first consultation to the final touch — is treated as an art form. This is more than a haircut. It's a ritual of refinement.",
+      text: "Since 2022, DABRO Barbershop has been redefining the grooming experience in Tashkent. We blend timeless craftsmanship with modern technique, creating a sanctuary where every detail — from the first consultation to the final touch — is treated as an art form. This is more than a haircut. It's a ritual of refinement.",
       stat1: "Years of Excellence",
       stat2: "Happy Clients",
       stat3: "Awards Won",
@@ -297,7 +324,7 @@ const translations = {
     about: {
       kicker: "О нас",
       title: "Искусство безупречного стиля",
-      text: "Более десяти лет Elite Barber Studio задаёт новые стандарты барберинга в городе. Мы сочетаем традиционное мастерство с современными техниками, создавая пространство, где каждая деталь — от первой консультации до финального штриха — становится настоящим искусством. Это больше, чем стрижка. Это ритуал безупречности.",
+      text: "С 2022 года DABRO Barbershop задаёт новые стандарты барберинга в Ташкенте. Мы сочетаем традиционное мастерство с современными техниками, создавая пространство, где каждая деталь — от первой консультации до финального штриха — становится настоящим искусством. Это больше, чем стрижка. Это ритуал безупречности.",
       stat1: "Лет совершенства",
       stat2: "Довольных клиентов",
       stat3: "Наград получено",
@@ -344,7 +371,7 @@ const translations = {
     about: {
       kicker: "Biz haqimizda",
       title: "Mukammal parvarishlash san'ati",
-      text: "O'n yildan ortiq vaqt davomida Elite Barber Studio shaharda barberlik sohasini yangi bosqichga olib chiqdi. Biz an'anaviy mahoratni zamonaviy texnika bilan uyg'unlashtirib, har bir detal — birinchi maslahatdan so'nggi teginishgacha — san'at asari sifatida qaraladigan makon yaratamiz. Bu shunchaki soch olish emas. Bu mukammallik marosimi.",
+      text: "2022 yildan buyon DABRO Barbershop Toshkentda barberlik sohasini yangi bosqichga olib chiqmoqda. Biz an'anaviy mahoratni zamonaviy texnika bilan uyg'unlashtirib, har bir detal — birinchi maslahatdan so'nggi teginishgacha — san'at asari sifatida qaraladigan makon yaratamiz. Bu shunchaki soch olish emas. Bu mukammallik marosimi.",
       stat1: "Yillik tajriba",
       stat2: "Mamnun mijozlar",
       stat3: "Yutilgan mukofotlar",
@@ -450,31 +477,30 @@ const staggerContainer = (staggerChildren = 0.12, delayChildren = 0) => ({
 const barbersData = [
   {
     id: 1,
-    name: "Aziz Karimov",
-    photo: "https://randomuser.me/api/portraits/men/32.jpg",
+    name: "Jamshid",
+    photo: "https://i.postimg.cc/Bvdg74Nh/IMG-2378.avif",
     position: { en: "Master Barber & Founder", ru: "Мастер-барбер и основатель", uz: "Usta barber va asoschisi" },
     experience: 12,
     rating: 5.0,
-    languages: ["EN", "RU", "UZ"],
-    phone: "+998 90 123 45 67",
+    languages: ["", "RU", "UZ"],
+  
     telegram: "aziz_barber",
     instagram: "aziz.barber",
     skills: ["fade", "beard", "classic", "hotTowel", "hairDesign"],
     description: {
-      en: "The visionary behind Elite Barber Studio — Aziz blends classic barbering traditions with modern precision, and his steady hand has made his name synonymous with excellence.",
-      ru: "Визионер, стоящий за Elite Barber Studio. Азиз сочетает классические традиции барберинга с современной точностью — его твёрдая рука сделала его имя синонимом совершенства.",
-      uz: "Elite Barber Studio ortidagi g'oya muallifi. Aziz klassik an'analarni zamonaviy aniqlik bilan uyg'unlashtiradi — uning ishonchli qo'li uni mukammallik timsoliga aylantirdi.",
+      en: "The visionary behind DABRO Barbershop — Aziz blends classic barbering traditions with modern precision, and his steady hand has made his name synonymous with excellence.",
+      ru: "Визионер, стоящий за DABRO Barbershop. Азиз сочетает классические традиции барберинга с современной точностью — его твёрдая рука сделала его имя синонимом совершенства.",
+      uz: "DABRO Barbershop ortidagi g'oya muallifi. Aziz klassik an'analarni zamonaviy aniqlik bilan uyg'unlashtiradi — uning ishonchli qo'li uni mukammallik timsoliga aylantirdi.",
     },
   },
   {
     id: 2,
-    name: "David Bennett",
-    photo: "https://randomuser.me/api/portraits/men/56.jpg",
+    name: "Sherzod",
+    photo: "https://i.postimg.cc/CKV5c2kK/IMG-2385.avif",
     position: { en: "Senior Barber", ru: "Старший барбер", uz: "Katta barber" },
     experience: 8,
     rating: 4.9,
-    languages: ["EN", "RU"],
-    phone: "+998 91 234 56 78",
+    languages: ["UZ", "RU"],
     telegram: "david_barber",
     instagram: "david.barber",
     skills: ["skinFade", "texturedCrop", "modern", "buzzCut"],
@@ -486,13 +512,12 @@ const barbersData = [
   },
   {
     id: 3,
-    name: "Rustam Yusupov",
-    photo: "https://randomuser.me/api/portraits/men/68.jpg",
+    name: "Kamron",
+    photo: "",
     position: { en: "Beard Specialist", ru: "Специалист по бороде", uz: "Soqol bo'yicha mutaxassis" },
     experience: 6,
     rating: 4.8,
-    languages: ["RU", "UZ"],
-    phone: "+998 93 345 67 89",
+    languages: ["", "UZ"],
     telegram: "rustam_barber",
     instagram: "rustam.barber",
     skills: ["beard", "hotTowel", "classic"],
@@ -504,12 +529,12 @@ const barbersData = [
   },
   {
     id: 4,
-    name: "Jasur Nazarov",
-    photo: "https://randomuser.me/api/portraits/men/75.jpg",
+    name: "Kamron",
+    photo: "https://i.postimg.cc/tCVc9vnx/IMG-2372.avif",
     position: { en: "Style Consultant", ru: "Стилист-консультант", uz: "Uslub bo'yicha maslahatchi" },
     experience: 5,
     rating: 4.7,
-    languages: ["EN", "UZ"],
+    languages: ["", "UZ"],
     phone: "+998 94 456 78 90",
     telegram: "jasur_barber",
     instagram: "jasur.barber",
@@ -758,7 +783,7 @@ const FloatingContactButton = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.22, ease: EASE }}
-            className="mb-3 w-[270px] rounded-2xl border border-[#c9a96f]/20 bg-[#0f0d0b]/95 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+            className="mb-3 w-[270px] rounded-2xl border border-[#c9a96f]/20 bg-[#0f0d0b]/95 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.45)] backdrop-blur-md"
           >
             <div className="flex items-center justify-between mb-3">
               <div>
@@ -808,12 +833,23 @@ const BarberCard = ({ barber, lang, t }) => (
   >
     {/* Photo + name overlay */}
     <div className="relative aspect-[4/3] overflow-hidden">
-      <img
-        src={barber.photo}
-        alt={barber.name}
-        loading="lazy"
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-      />
+      {barber.photo ? (
+        <img
+          src={barber.photo}
+          alt={barber.name}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+      ) : (
+        // barber.photo bo'sh bo'lsa (masalan hali rasm yuklanmagan bo'lsa), buzilgan
+        // <img> o'rniga chiroyli, brendga mos placeholder ko'rsatiladi.
+        <div className="w-full h-full flex items-center justify-center bg-[linear-gradient(135deg,#1c1712_0%,#2a2118_100%)]">
+          <span className="font-display text-6xl font-bold text-[#d4b06a]/35">
+            {barber.name.charAt(0)}
+          </span>
+        </div>
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-transparent" />
       <div className="absolute bottom-4 left-5 right-5">
         <h3 className="font-display text-xl md:text-2xl font-bold text-white">{barber.name}</h3>
@@ -953,7 +989,7 @@ const LoadingScreen = () => (
         className="h-full bg-white"
         initial={{ width: "0%" }}
         animate={{ width: "100%" }}
-        transition={{ duration: 2.2, ease: "easeInOut" }}
+        transition={{ duration: 1.7, ease: "easeInOut" }}
       />
     </div>
   </motion.div>
@@ -967,9 +1003,20 @@ const Navbar = ({ lang, setLang, t }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    // { passive: true } + requestAnimationFrame throttling: brauzer scroll'ni
+    // darhol boshlaydi, handler esa freym tezligidan tez-tez ishlamaydi — bu
+    // ayniqsa telefonda scroll paytidagi "qotish"ni kamaytiradi.
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 40);
+        ticking = false;
+      });
+    };
     onScroll();
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -981,7 +1028,7 @@ const Navbar = ({ lang, setLang, t }) => {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        scrolled ? "bg-[#060606]/80 backdrop-blur-2xl border-b border-[#d4b06a]/15 py-3 md:py-4 shadow-[0_10px_40px_rgba(0,0,0,0.2)]" : "bg-transparent py-5 md:py-7"
+        scrolled ? "bg-[#060606]/90 backdrop-blur-md border-b border-[#d4b06a]/15 py-3 md:py-4 shadow-[0_10px_40px_rgba(0,0,0,0.2)]" : "bg-transparent py-5 md:py-7"
       }`}
     >
       <nav className="max-w-7xl mx-auto px-5 md:px-10 flex items-center justify-between">
@@ -1039,7 +1086,7 @@ const Navbar = ({ lang, setLang, t }) => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.4, ease: EASE }}
-            className="lg:hidden overflow-hidden bg-black/95 backdrop-blur-xl border-t border-white/10"
+            className="lg:hidden overflow-hidden bg-black/95 backdrop-blur-md border-t border-white/10"
           >
             <div className="flex flex-col px-6 py-6 gap-1">
               {navLinks.map((link, i) => (
@@ -1077,11 +1124,16 @@ const Navbar = ({ lang, setLang, t }) => {
    ========================================================================= */
 const Hero = ({ t }) => {
   const ref = useRef(null);
+  const simplified = useSimplifiedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+  // Telefonda / reduced-motion'da video "scale" qilinmaydi va parallaks siljishi
+  // o'chiriladi — bular shu sahifadagi eng GPU-talab qiluvchi effekt bo'lib,
+  // scroll paytida qotishning asosiy sababchisi edi. Fade-in (opacity) esa arzon
+  // bo'lgani uchun hamma joyda saqlanadi.
+  const bgY = useTransform(scrollYProgress, [0, 1], simplified ? ["0%", "0%"] : ["0%", "25%"]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], simplified ? [1, 1] : [1, 1.2]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "35%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], simplified ? ["0%", "0%"] : ["0%", "35%"]);
 
   const titleWords = t.hero.title.split(" ");
 
@@ -1188,8 +1240,11 @@ const Hero = ({ t }) => {
    3. ABOUT — copy on the left (fade-left), image on the right (fade-right)
    ========================================================================= */
 const About = ({ t }) => {
+  // DABRO Barbershop 2022 yilda ochilgan — shu yildan hisoblab, "faoliyat yillari"
+  // sonini har doim to'g'ri (avtomatik) ko'rsatish uchun.
+  const yearsActive = new Date().getFullYear() - 2022;
   const stats = [
-    { value: 12, suffix: "+", label: t.about.stat1 },
+    { value: yearsActive, suffix: "+", label: t.about.stat1 },
     { value: 8500, suffix: "+", label: t.about.stat2 },
     { value: 15, suffix: "", label: t.about.stat3 },
   ];
@@ -1239,11 +1294,12 @@ const About = ({ t }) => {
             src={MEDIA.about}
             alt="Inside DABRO Barbershop"
             loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
           />
           <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl" />
           <div className="absolute -bottom-6 -left-6 bg-[linear-gradient(135deg,#f7ebcc_0%,#d4b06a_100%)] text-[#140f08] rounded-2xl px-6 py-5 shadow-[0_20px_60px_rgba(212,176,106,0.2)] hidden md:block">
-            <div className="font-display text-2xl font-bold">12+</div>
+            <div className="font-display text-2xl font-bold">{yearsActive}+</div>
             <div className="text-xs text-neutral-600 tracking-wide">{t.about.stat1}</div>
           </div>
         </motion.div>
@@ -1277,6 +1333,7 @@ const Gallery = ({ t }) => (
               src={item.url}
               alt={t.gallery.categories[item.category]}
               loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -1298,7 +1355,13 @@ const Gallery = ({ t }) => (
    ========================================================================= */
 const VideoSection = ({ t }) => {
   const [muted, setMuted] = useState(true);
+  const [videoFailed, setVideoFailed] = useState(false);
   const videoRef = useRef(null);
+  const wrapperRef = useRef(null);
+  // Video shu bo'lim ko'rinishga ~200px qolganda yuklana boshlaydi — sahifa birinchi
+  // ochilganda 2 ta video bir vaqtda yuklanib, telefonni "qotirib" qo'ymasligi uchun.
+  const isNearView = useInView(wrapperRef, { once: true, margin: "200px" });
+  const showVideo = isNearView && !videoFailed;
 
   const toggleMute = () => {
     setMuted((m) => !m);
@@ -1311,31 +1374,49 @@ const VideoSection = ({ t }) => {
         <SectionHeading kicker={t.video.kicker} title={t.video.title} subtitle={t.video.subtitle} />
 
         <motion.div
+          ref={wrapperRef}
           initial={{ opacity: 0, scale: 0.94 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.9, ease: EASE }}
           className="relative aspect-video rounded-[30px] overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.35)] border border-[#d4b06a]/20 bg-[#100d0a]"
         >
-          <video
-            ref={videoRef}
-            className="w-full h-full object-cover"
-            autoPlay
-            muted={muted}
-            loop
-            playsInline
-            poster={MEDIA.about}
-          >
-            <source src={MEDIA.promoVideo} type="video/mp4" />
-          </video>
+          {showVideo ? (
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover"
+              autoPlay
+              muted={muted}
+              loop
+              playsInline
+              preload="metadata"
+              poster={MEDIA.about}
+              onError={() => setVideoFailed(true)}
+            >
+              <source src={MEDIA.promoVideo} type="video/mp4" />
+            </video>
+          ) : (
+            // Video hali ko'rinishga kelmagan, yoki havolasi ishlamasa (masalan hozirgi
+            // .avif bug holatida) — shu yerda oddiy rasm ko'rsatiladi, ekran bo'sh yoki
+            // "buzilgan" ko'rinmasligi uchun.
+            <img
+              src={MEDIA.about}
+              alt={t.video.title}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover"
+            />
+          )}
           <div className="absolute inset-0 bg-black/10 pointer-events-none" />
-          <button
-            onClick={toggleMute}
-            aria-label="Toggle sound"
-            className="absolute bottom-5 right-5 w-11 h-11 rounded-full bg-[#0f0d09]/70 backdrop-blur-md border border-[#d4b06a]/25 flex items-center justify-center text-[#f8f1e6] hover:bg-[#d4b06a] hover:text-[#140f08] transition-colors duration-300"
-          >
-            {muted ? <IconVolumeOff className="w-5 h-5" /> : <IconVolumeOn className="w-5 h-5" />}
-          </button>
+          {showVideo && (
+            <button
+              onClick={toggleMute}
+              aria-label="Toggle sound"
+              className="absolute bottom-5 right-5 w-11 h-11 rounded-full bg-[#0f0d09]/70 backdrop-blur-md border border-[#d4b06a]/25 flex items-center justify-center text-[#f8f1e6] hover:bg-[#d4b06a] hover:text-[#140f08] transition-colors duration-300"
+            >
+              {muted ? <IconVolumeOff className="w-5 h-5" /> : <IconVolumeOn className="w-5 h-5" />}
+            </button>
+          )}
         </motion.div>
       </div>
     </section>
@@ -1553,11 +1634,12 @@ export default function App() {
   const t = translations[lang];
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     document.body.style.overflow = "hidden";
     const timer = setTimeout(() => {
       setIsLoading(false);
       document.body.style.overflow = "";
-    }, 2500);
+    }, prefersReducedMotion ? 400 : 1800);
     return () => {
       clearTimeout(timer);
       document.body.style.overflow = "";
