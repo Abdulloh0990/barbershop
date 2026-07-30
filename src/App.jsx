@@ -607,7 +607,7 @@ const navLinks = [
 const shopContact = {
   phone: "+998 77 960 66 64",
   telegram: "dabrobarbershop",
-  instagram: "dabrobarbershop",
+  instagram: "https://www.instagram.com/dabro_barbershopuz?igsh=MXhoZXY3bm1lajNmdg%3D%3D&utm_source=qr",
   mapsUrl: "https://maps.app.goo.gl/UHqvJfRG2E13WWRi9?g_st=ic",
 };
 
