@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   motion,
   AnimatePresence,
@@ -125,61 +125,6 @@ const useSimplifiedMotion = () => {
   }, []);
 
   return simplified;
-};
-
-/* ============================================================================
-   RASM TEZLIGI — nega rasmlar sekin edi va bu yerda nima qilinmoqda:
-
-   Barcha "suratlar" hozir postimg.cc'da turibdi — bu bepul, forumlarga rasm
-   yuklash uchun mo'ljallangan xizmat, JONLI SAYT uchun emas. U ba'zan boshqa
-   serverlarning (hatto brauzerlarning ham) rasmni yuklab olishiga umuman
-   ruxsat bermaydi yoki juda sekinlashtiradi — shuning uchun ba'zi rasmlar
-   2-3 daqiqagacha (yoki umuman) ochilmasligi mumkin edi. Bu KOD muammosi emas.
-
-   Shu sababli har bir tashqi (http/https) rasm endi bepul, ishonchli CDN-proksi
-   (images.weserv.nl, Cloudflare orqali 150+ dunyo bo'ylab serverlardan beradi)
-   orqali o'tkaziladi — u rasmni kichraytirib, siqib, WebP formatida qaytaradi.
-   Bu YORDAM BERISHI KERAK, lekin 100% KAFOLAT EMAS — agar postimg.cc bu
-   proksiga ham rasmni berishni rad etsa, muammo baribir qoladi.
-
-   ENG ISHONCHLI YECHIM: rasmlarni postimg.cc'dan butunlay ko'chirish — yo
-   faylning eng boshidagi yo'riqnomadagidek o'z loyihangizga (public/media/...)
-   joylashtirish, yo Cloudinary/ImageKit kabi rasm uchun maxsus xizmatga
-   yuklash. O'zingiz joylashtirgan ("/media/...") rasmlarga bu proksi tegmaydi
-   — ular allaqachon tez bo'lgani uchun.
-   ========================================================================= */
-const optimizeImage = (url, width, quality = 78) => {
-  if (!url || !/^https?:\/\//i.test(url)) return url; // o'zingiz joylashtirgan rasm — tegilmaydi
-  const bare = url.replace(/^https?:\/\//i, "");
-  return `https://images.weserv.nl/?url=${encodeURIComponent(bare)}&w=${width}&q=${quality}&output=webp&we=1`;
-};
-
-/* Optimallashtirilgan <img>: yuklanayotganda yumshoq "shimmer" fon ko'rsatadi,
-   tayyor bo'lgach rasm muloyim tarzda paydo bo'ladi — ekran bo'sh yoki
-   "qotgandek" ko'rinmasligi uchun. Ishlatilishi: ota elementi "relative" bo'lishi
-   kerak (SmartImage ichida o'zi to'ldiruvchi 2 ta qatlam qaytaradi). */
-const SmartImage = ({ src, width = 800, quality = 78, alt, loading = "lazy", imgClassName = "" }) => {
-  const [loaded, setLoaded] = useState(false);
-  const optimized = optimizeImage(src, width, quality);
-
-  return (
-    <>
-      <div
-        aria-hidden="true"
-        className={`absolute inset-0 bg-[linear-gradient(110deg,_var(--surface)_8%,_var(--surface-strong)_18%,_var(--surface)_33%)] [background-size:200%_100%] transition-opacity duration-500 ${
-          loaded ? "opacity-0 pointer-events-none" : "opacity-100 animate-[shimmer_1.6s_linear_infinite]"
-        }`}
-      />
-      <img
-        src={optimized}
-        alt={alt}
-        loading={loading}
-        decoding="async"
-        onLoad={() => setLoaded(true)}
-        className={`w-full h-full object-cover transition-opacity duration-700 ${loaded ? "opacity-100" : "opacity-0"} ${imgClassName}`}
-      />
-    </>
-  );
 };
 
 /* ============================================================================
@@ -662,28 +607,14 @@ const navLinks = [
 const shopContact = {
   phone: "+998 77 960 66 64",
   telegram: "dabrobarbershop",
-  instagramUrl:
-    "https://www.instagram.com/dabro_barbershopuz?igsh=MXhoZXY3bm1lajNmdg%3D%3D&utm_source=qr",
+  instagram: "dabrobarbershop",
   mapsUrl: "https://maps.app.goo.gl/UHqvJfRG2E13WWRi9?g_st=ic",
 };
 
 /* ============================================================================
    GLOBAL STYLES — fonts, scrollbar, selection colour, dark map filter
    ========================================================================= */
-const GlobalStyles = () => {
-  // Rasmlar endi images.weserv.nl orqali o'tadi — shu domenga oldindan
-  // ulanib qo'yish (DNS+TLS) birinchi rasm so'ralganda biroz vaqt tejaydi.
-  useLayoutEffect(() => {
-    if (document.querySelector('link[data-dabro-preconnect="weserv"]')) return;
-    const link = document.createElement("link");
-    link.rel = "preconnect";
-    link.href = "https://images.weserv.nl";
-    link.crossOrigin = "";
-    link.setAttribute("data-dabro-preconnect", "weserv");
-    document.head.appendChild(link);
-  }, []);
-
-  return (
+const GlobalStyles = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,500&family=Inter:wght@300;400;500;600;700;800&display=swap');
     :root {
@@ -722,13 +653,8 @@ const GlobalStyles = () => {
       color: transparent;
       text-shadow: 0 1px 1px rgba(0,0,0,0.35);
     }
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
   `}</style>
-  );
-};
+);
 
 /* ============================================================================
    SMALL REUSABLE PIECES
@@ -874,7 +800,7 @@ const FloatingContactButton = () => {
               <IconLink href={`https://t.me/${shopContact.telegram}`} label="Telegram">
                 <IconTelegram className="w-4 h-4" />
               </IconLink>
-              <IconLink href={shopContact.instagramUrl} label="Instagram">
+              <IconLink href={`https://instagram.com/${shopContact.instagram}`} label="Instagram">
                 <IconInstagram className="w-4 h-4" />
               </IconLink>
             </div>
@@ -908,11 +834,12 @@ const BarberCard = ({ barber, lang, t }) => (
     {/* Photo + name overlay */}
     <div className="relative aspect-[4/3] overflow-hidden">
       {barber.photo ? (
-        <SmartImage
+        <img
           src={barber.photo}
-          width={700}
           alt={barber.name}
-          imgClassName="transition-transform duration-700 group-hover:scale-110"
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
       ) : (
         // barber.photo bo'sh bo'lsa (masalan hali rasm yuklanmagan bo'lsa), buzilgan
@@ -1363,11 +1290,12 @@ const About = ({ t }) => {
           viewport={{ once: true, amount: 0.3 }}
           className="relative aspect-[4/5] rounded-3xl overflow-hidden group"
         >
-          <SmartImage
+          <img
             src={MEDIA.about}
-            width={900}
             alt="Inside DABRO Barbershop"
-            imgClassName="transition-transform duration-1000 ease-out group-hover:scale-110"
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
           />
           <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl" />
           <div className="absolute -bottom-6 -left-6 bg-[linear-gradient(135deg,#f7ebcc_0%,#d4b06a_100%)] text-[#140f08] rounded-2xl px-6 py-5 shadow-[0_20px_60px_rgba(212,176,106,0.2)] hidden md:block">
@@ -1401,11 +1329,12 @@ const Gallery = ({ t }) => (
             variants={scaleIn}
             className={`relative rounded-2xl md:rounded-3xl overflow-hidden group cursor-pointer border border-[#d4b06a]/15 bg-[#100d0a] shadow-[0_16px_50px_rgba(0,0,0,0.25)] ${item.span}`}
           >
-            <SmartImage
+            <img
               src={item.url}
-              width={800}
               alt={t.gallery.categories[item.category]}
-              imgClassName="transition-transform duration-700 ease-out group-hover:scale-110"
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="absolute bottom-0 left-0 p-4 md:p-5 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
@@ -1470,7 +1399,13 @@ const VideoSection = ({ t }) => {
             // Video hali ko'rinishga kelmagan, yoki havolasi ishlamasa (masalan hozirgi
             // .avif bug holatida) — shu yerda oddiy rasm ko'rsatiladi, ekran bo'sh yoki
             // "buzilgan" ko'rinmasligi uchun.
-            <SmartImage src={MEDIA.about} width={900} alt={t.video.title} />
+            <img
+              src={MEDIA.about}
+              alt={t.video.title}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover"
+            />
           )}
           <div className="absolute inset-0 bg-black/10 pointer-events-none" />
           {showVideo && (
@@ -1603,7 +1538,7 @@ const Contact = ({ t }) => (
             <IconLink href={`https://t.me/${shopContact.telegram}`} label="Telegram">
               <IconTelegram className="w-5 h-5" />
             </IconLink>
-            <IconLink href={shopContact.instagramUrl} label="Instagram">
+            <IconLink href={`https://instagram.com/${shopContact.instagram}`} label="Instagram">
               <IconInstagram className="w-5 h-5" />
             </IconLink>
           </motion.div>
@@ -1669,7 +1604,7 @@ const Footer = ({ t }) => (
           <IconLink href={`https://t.me/${shopContact.telegram}`} label="Telegram">
             <IconTelegram className="w-4 h-4" />
           </IconLink>
-          <IconLink href={shopContact.instagramUrl} label="Instagram">
+          <IconLink href={`https://instagram.com/${shopContact.instagram}`} label="Instagram">
             <IconInstagram className="w-4 h-4" />
           </IconLink>
         </div>
